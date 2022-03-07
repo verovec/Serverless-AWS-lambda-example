@@ -56,7 +56,7 @@ functions:
           private: true
       - httpApi:
           method: "*"
-          path: /dev/start-dev
+          path: /hello
       - schedule:
-          name: start-dev-cron-event
+          name: hello-event
           rate: cron(30 18 ? * MON-SUN *)
