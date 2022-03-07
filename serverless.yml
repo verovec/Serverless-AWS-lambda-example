@@ -1,0 +1,62 @@
+service: lib-lambda
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: eu-west-1
+  stackName: lib-lambda-dev
+  memorySize: 512
+  timeout: 10
+  deploymentBucket:
+    blockPublicAccess: true
+    name: lib-lambda.verovec.fr
+  deploymentPrefix: serverless
+  apiGateway:
+    metrics: false
+    apiKeySourceType: HEADER
+    apiKeys:
+      - name: myApiKey
+        value: ${ssm:/API_KEY_SERVERLESS}
+        description: Api key required for call functions
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 'route53:ChangeResourceRecordSets'
+            - 'ec2:StartInstances'
+            - 'ec2:StopInstances'
+            - 'ec2:ModifySpotFleetRequest'
+          Resource: "*"
+
+plugins:
+  - serverless-domain-manager
+  - serverless-python-requirements
+
+custom:
+  customDomain:
+    domainName: lib-lambda.verovec.fr
+    certificateName: '*.verovec.fr'
+    createRoute53Record: true
+  pythonRequirements:
+    dockerizePip: non-linux
+
+functions:
+  hello:
+    name: hello
+    handler: src/hello/hello.lambda_handler
+    events:
+      - http:
+          path: /hello
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - X-Api-Key
+          private: true
+      - httpApi:
+          method: "*"
+          path: /dev/start-dev
+      - schedule:
+          name: start-dev-cron-event
+          rate: cron(30 18 ? * MON-SUN *)
