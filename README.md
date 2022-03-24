@@ -34,11 +34,6 @@ sls create_domain
 sls deploy --verbose --conceal
 ```
 
-### Cloud architecture :
-
-![](ressources/cloud-architecture.png)
-
-
 # Files structure
 
 ```
@@ -52,8 +47,6 @@ Serverless-AWS-transactional-mailer
  │    └── hello.py
  │
  ├── requirements.txt
- │
- ├── serverless.yml
  |
- └── ressources
+ └── serverless.yml
 ```
