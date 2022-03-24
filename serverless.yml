@@ -9,7 +9,7 @@ provider:
   timeout: 10
   deploymentBucket:
     blockPublicAccess: true
-    name: lib-lambda.verovec.fr
+    name: ${ssm:/BUCKET_NAME}
   deploymentPrefix: serverless
   apiGateway:
     metrics: false
@@ -18,16 +18,6 @@ provider:
       - name: myApiKey
         value: ${ssm:/API_KEY_SERVERLESS}
         description: Api key required for call functions
-  iam:
-    role:
-      statements:
-        - Effect: 'Allow'
-          Action:
-            - 'route53:ChangeResourceRecordSets'
-            - 'ec2:StartInstances'
-            - 'ec2:StopInstances'
-            - 'ec2:ModifySpotFleetRequest'
-          Resource: "*"
 
 plugins:
   - serverless-domain-manager
@@ -35,8 +25,8 @@ plugins:
 
 custom:
   customDomain:
-    domainName: lib-lambda.verovec.fr
-    certificateName: '*.verovec.fr'
+    domainName: ${ssm:/DOMAIN_NAME}
+    certificateName: ${ssm:/CERTIFICATE_NAME}
     createRoute53Record: true
   pythonRequirements:
     dockerizePip: non-linux
@@ -54,9 +44,6 @@ functions:
             headers:
               - X-Api-Key
           private: true
-      - httpApi:
-          method: "*"
-          path: /hello
       - schedule:
           name: hello-event
           rate: cron(30 18 ? * MON-SUN *)
