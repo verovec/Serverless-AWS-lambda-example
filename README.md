@@ -9,7 +9,7 @@
 
 This project shows how to deploy function to AWS lambda from Serverless framework on custom domain
 
-If you don't have any domain name and assciated certificate you can
+If you don't have any domain name and associated certificate you can
 - Skip the first two initals put-parameter commands
 - Skip serverless-domain-manager npm installation
 - Remove it from plugins in serverless.yml
