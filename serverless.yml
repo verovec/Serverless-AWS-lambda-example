@@ -20,14 +20,9 @@ provider:
         description: Api key required for call functions
 
 plugins:
-  - serverless-domain-manager
   - serverless-python-requirements
 
 custom:
-  customDomain:
-    domainName: ${ssm:/DOMAIN_NAME}
-    certificateName: ${ssm:/CERTIFICATE_NAME}
-    createRoute53Record: true
   pythonRequirements:
     dockerizePip: non-linux
 
@@ -36,14 +31,6 @@ functions:
     name: hello
     handler: src/hello/hello.lambda_handler
     events:
-      - http:
-          path: /hello
-          method: get
-          cors:
-            origin: '*'
-            headers:
-              - X-Api-Key
-          private: true
       - schedule:
           name: hello-event
           rate: cron(30 18 ? * MON-SUN *)
