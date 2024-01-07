@@ -25,7 +25,6 @@ aws ssm put-parameter --name S3_BUCKET --value ${S3_BUCKET} --type SecureString
 ```bash
 npm install -g serverless
 sls plugin install -n serverless-python-requirements
-sls plugin install -n serverless-domain-manager
 sls create_domain
 sls deploy --verbose --conceal
 ```
